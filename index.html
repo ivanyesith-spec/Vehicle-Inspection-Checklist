@@ -1,0 +1,2271 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#12233d"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Checklist 360"><meta name="apple-mobile-web-app-status-bar-style" content="default"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
+<title>Vehicle Checklist · 360 Estates</title>
+<style>
+  :root{
+    --navy:#12233d;
+    --navy-2:#1b3358;
+    --steel:#4d6a8f;
+    --amber:#e8a33d;
+    --amber-dark:#c8862a;
+    --ok:#3f9160;
+    --bad:#c14b3f;
+    --bg:#f4f6f9;
+    --card:#ffffff;
+    --line:#e1e6ed;
+    --ink:#182437;
+    --ink-soft:#5b6b82;
+    --radius:12px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    padding-bottom:120px;
+    padding-bottom:calc(120px + env(safe-area-inset-bottom, 0px));
+    overflow-x:hidden;
+  }
+  input,select,textarea,button{font-family:inherit;}
+  header{
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 100%);
+    color:#fff;
+    padding:16px 16px 16px;
+    padding-top:calc(16px + env(safe-area-inset-top, 0px));
+    position:relative;
+    z-index:20;
+    box-shadow:0 2px 10px rgba(18,35,61,.25);
+  }
+  .logo-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:12px;
+  }
+  .logo-row .logo-360{
+    font-family:Georgia,'Times New Roman',serif;
+    font-size:26px;
+    font-weight:400;
+    letter-spacing:1px;
+    background:linear-gradient(135deg,#c98a4b,#e3b57c 50%,#b97c3f);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .logo-row .logo-sub{
+    font-size:10px;
+    letter-spacing:5px;
+    color:#cfc2ae;
+    font-weight:300;
+    margin-top:2px;
+  }
+  header h1{
+    margin:0 0 10px;
+    font-size:15px;
+    font-weight:700;
+    text-align:center;
+    letter-spacing:.03em;
+    color:#e9edf3;
+    text-transform:uppercase;
+  }
+  .mode-row{
+    display:flex;
+    gap:6px;
+    margin-bottom:12px;
+    background:rgba(255,255,255,.07);
+    border-radius:10px;
+    padding:4px;
+  }
+  .mode-btn{
+    flex:1;
+    padding:9px 4px;
+    border-radius:8px;
+    border:none;
+    background:transparent;
+    color:#a9bad4;
+    font-size:13px;
+    font-weight:700;
+    line-height:1.2;
+    cursor:pointer;
+  }
+  .mode-btn span{
+    display:block;
+    font-size:10px;
+    font-weight:500;
+    opacity:.8;
+    margin-top:2px;
+  }
+  .mode-btn.active{
+    background:var(--amber);
+    color:#1c1204;
+  }
+  .due-banner{
+    background:rgba(232,163,61,.18);
+    border:1px solid rgba(232,163,61,.55);
+    border-radius:8px;
+    padding:9px 11px;
+    margin-bottom:10px;
+    font-size:11.5px;
+    font-weight:600;
+    line-height:1.35;
+    color:#ffdda6;
+    cursor:pointer;
+  }
+  .due-banner[hidden]{display:none;}
+  .mode-tag{
+    font-size:10px;
+    font-weight:700;
+    padding:2px 7px;
+    border-radius:10px;
+    background:#eef2f7;
+    color:var(--steel);
+    margin-left:6px;
+  }
+  .top-fields{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .top-fields .full{grid-column:1/-1;}
+  .top-fields label{
+    display:block;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:#a9bad4;
+    margin-bottom:3px;
+  }
+  .top-fields input, .top-fields select{
+    width:100%;
+    padding:9px 10px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,.15);
+    background:rgba(255,255,255,.08);
+    color:#fff;
+    font-size:16px;
+    min-height:40px;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  .top-fields input[type=date]{text-align:left;}
+  .top-fields input[hidden]{display:none;}
+  .top-fields select + input{margin-top:6px;}
+  .odo-warn{
+    grid-column:1/-1;
+    display:none;
+    background:rgba(232,163,61,.16);
+    border:1px solid rgba(232,163,61,.5);
+    border-radius:8px;
+    padding:7px 10px;
+    font-size:11.5px;
+    line-height:1.35;
+    color:#ffdda6;
+  }
+  .odo-warn.show{display:block;}
+  .top-fields select{
+    background-image:linear-gradient(45deg,transparent 50%,#a9bad4 50%),linear-gradient(135deg,#a9bad4 50%,transparent 50%);
+    background-position:calc(100% - 16px) 17px, calc(100% - 11px) 17px;
+    background-size:5px 5px,5px 5px;
+    background-repeat:no-repeat;
+  }
+  .top-fields select option{color:#12233d;background:#fff;}
+  .top-fields input::placeholder{color:#8ea3c3;}
+  .top-fields input:focus, .top-fields select:focus{
+    outline:2px solid var(--amber);
+    background:rgba(255,255,255,.14);
+  }
+  main{padding:14px 12px 10px;max-width:640px;margin:0 auto;}
+  .section{
+    background:var(--card);
+    border-radius:var(--radius);
+    border:1px solid var(--line);
+    margin-bottom:12px;
+    overflow:hidden;
+  }
+  .section-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 14px;
+    background:#eef2f7;
+    border-bottom:1px solid var(--line);
+  }
+  .section-head h2{
+    margin:0;
+    font-size:14px;
+    font-weight:700;
+    color:var(--navy);
+  }
+  .section-count{
+    font-size:11px;
+    font-weight:700;
+    color:var(--steel);
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:3px 9px;
+  }
+  .item{
+    scroll-margin-top:12px;
+    padding:12px 14px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .item:last-child{border-bottom:none;}
+  .item.needs-photo{
+    background:#fdf2f0;
+    box-shadow:inset 4px 0 0 var(--bad);
+  }
+  .warn-banner{
+    max-width:640px;
+    margin:12px auto 0;
+    background:#fbe9e6;
+    border:1.5px solid #e0a89f;
+    border-left:5px solid var(--bad);
+    border-radius:10px;
+    padding:12px 14px;
+  }
+  .warn-banner h3{
+    margin:0 0 6px;
+    font-size:12.5px;
+    font-weight:800;
+    color:var(--bad);
+    text-transform:uppercase;
+    letter-spacing:.04em;
+  }
+  .warn-banner p{
+    margin:0 0 6px;
+    font-size:12.5px;
+    line-height:1.45;
+    color:#5c2f28;
+  }
+  .warn-banner p:last-child{margin-bottom:0;font-style:italic;}
+  .sec-note{
+    background:#fbe9e6;
+    border-bottom:1px solid #f2cfc9;
+    padding:8px 14px;
+    font-size:11.5px;
+    font-weight:600;
+    line-height:1.4;
+    color:#8c3529;
+  }
+  .slot-missing{
+    border:1.5px solid var(--bad) !important;
+    background:#fdf2f0;
+  }
+  .slot-missing .overview-slot-label{color:var(--bad);}
+  .slot-req{
+    font-size:9.5px;
+    font-weight:700;
+    color:var(--bad);
+    letter-spacing:.03em;
+    display:block;
+    margin-bottom:6px;
+  }
+  .ack-box{padding:14px;}
+  .ack-row{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    background:#fbe9e6;
+    border:1.5px solid #e0a89f;
+    border-radius:10px;
+    padding:12px;
+  }
+  .ack-row input[type=checkbox]{
+    width:24px;height:24px;
+    flex:0 0 24px;
+    margin:0;
+    accent-color:var(--bad);
+  }
+  .ack-row label{
+    font-size:13px;
+    font-weight:700;
+    line-height:1.4;
+    color:#5c2f28;
+  }
+  .ack-row label .es{display:block;font-weight:500;font-size:12px;margin-top:2px;}
+  .ack-missing .ack-row{box-shadow:0 0 0 3px rgba(193,75,63,.28);}
+  .ack-stamp{
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-top:8px;
+  }
+  .req-tag{
+    display:inline-block;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.03em;
+    color:var(--bad);
+    background:#fbe9e6;
+    border:1px solid #f2cfc9;
+    border-radius:12px;
+    padding:2px 8px;
+    margin-top:4px;
+  }
+  .item.needs-photo .photo-btn{
+    border-color:var(--bad);
+    color:var(--bad);
+  }
+  .item-label{
+    font-size:13.5px;
+    font-weight:600;
+    line-height:1.35;
+  }
+  .item-label .es{
+    display:block;
+    font-size:11.5px;
+    font-weight:400;
+    color:var(--ink-soft);
+    margin-top:1px;
+  }
+  .section-head h2 .es{
+    display:block;
+    font-size:10.5px;
+    font-weight:500;
+    color:var(--ink-soft);
+  }
+  .status-row{
+    display:flex;
+    gap:6px;
+  }
+  .status-btn{
+    flex:1;
+    padding:9px 4px;
+    border-radius:8px;
+    border:1.5px solid var(--line);
+    background:#fafbfc;
+    font-size:13px;
+    font-weight:700;
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .status-btn.yes.active{background:var(--ok);border-color:var(--ok);color:#fff;}
+  .status-btn.no.active{background:var(--bad);border-color:var(--bad);color:#fff;}
+  .toggle-extra-btn{
+    align-self:flex-start;
+    background:none;
+    border:none;
+    color:var(--steel);
+    font-size:11.5px;
+    font-weight:600;
+    padding:2px 0;
+    cursor:pointer;
+  }
+  .overview-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    padding:14px;
+  }
+  .overview-slot{
+    border:1px dashed var(--line);
+    border-radius:8px;
+    padding:8px;
+  }
+  .overview-slot-label{
+    font-size:11.5px;
+    font-weight:700;
+    color:var(--navy);
+    margin-bottom:6px;
+  }
+  .item-extra{
+    display:none;
+    gap:8px;
+    flex-direction:column;
+  }
+  .item-extra.show{display:flex;}
+  .item-extra textarea{
+    width:100%;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:8px 10px;
+    font-size:16px;
+    font-family:inherit;
+    resize:vertical;
+    min-height:44px;
+  }
+  .photo-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .photo-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:7px 12px;
+    border-radius:8px;
+    border:1.5px dashed var(--steel);
+    background:#fff;
+    color:var(--steel);
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .photo-thumb{
+    width:52px;height:52px;
+    border-radius:8px;
+    object-fit:cover;
+    border:1px solid var(--line);
+  }
+  .photo-thumb-wrap{position:relative;}
+  .photo-thumb-wrap .rm{
+    position:absolute;top:-6px;right:-6px;
+    width:18px;height:18px;
+    background:var(--bad);color:#fff;
+    border-radius:50%;
+    border:none;
+    font-size:11px;
+    line-height:18px;
+    text-align:center;
+    padding:0;
+    cursor:pointer;
+  }
+  .comments-box textarea{
+    width:100%;
+    min-height:90px;
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    padding:10px;
+    font-size:16px;
+    font-family:inherit;
+    resize:vertical;
+  }
+  .comments-box{padding:14px;}
+  .summary-bar{
+    position:fixed;
+    bottom:0;left:0;right:0;
+    background:#fff;
+    border-top:1px solid var(--line);
+    box-shadow:0 -4px 16px rgba(18,35,61,.1);
+    padding:10px 12px 10px;
+    padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px));
+    z-index:30;
+    max-width:640px;
+    margin:0 auto;
+  }
+  .summary-stats{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin-bottom:8px;
+    font-size:11.5px;
+    font-weight:700;
+  }
+  .summary-stats span{display:flex;align-items:center;gap:4px;}
+  .dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
+  .dot.yes{background:var(--ok);} .dot.no{background:var(--bad);} .dot.pending{background:#b7c1cf;}
+  .action-row{display:flex;gap:8px;}
+  .btn{
+    flex:1;
+    padding:13px;
+    border-radius:10px;
+    border:none;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .btn-primary{background:var(--amber);color:#1c1204;}
+  .btn-secondary{background:var(--navy);color:#fff;}
+  .btn-ghost{background:#eef2f7;color:var(--navy);}
+  .toast{
+    position:fixed;
+    top:14px;left:50%;
+    transform:translateX(-50%) translateY(-60px);
+    background:var(--navy);
+    color:#fff;
+    padding:10px 18px;
+    border-radius:30px;
+    font-size:13px;
+    font-weight:600;
+    z-index:60;
+    transition:transform .25s ease;
+    box-shadow:0 6px 20px rgba(0,0,0,.25);
+    max-width:80%;
+    text-align:center;
+  }
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .history-panel{
+    position:fixed;
+    top:0;right:0;bottom:0;left:0;
+    background:rgba(12,20,33,.55);
+    z-index:50;
+    display:none;
+  }
+  .history-panel.show{display:block;}
+  .history-sheet{
+    position:absolute;
+    bottom:0;left:0;right:0;
+    max-height:82vh;
+    background:#fff;
+    border-radius:16px 16px 0 0;
+    padding:16px;
+    padding-bottom:calc(16px + env(safe-area-inset-bottom, 0px));
+    -webkit-overflow-scrolling:touch;
+    overflow-y:auto;
+    max-width:640px;
+    margin:0 auto;
+  }
+  .history-sheet h3{margin:0 0 12px;font-size:16px;color:var(--navy);}
+  .hist-filters{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-bottom:14px;
+    padding-bottom:12px;
+    border-bottom:1px solid var(--line);
+  }
+  .hist-filters .row{display:flex;gap:8px;}
+  .hist-filters input{
+    flex:1;
+    width:100%;
+    min-width:0;
+    padding:8px 10px;
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    font-size:16px;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  .hist-filters .date-field{flex:1;display:flex;flex-direction:column;gap:2px;}
+  .hist-filters .date-field label{font-size:10px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;}
+  .hist-clear-btn{
+    background:none;
+    border:none;
+    color:var(--steel);
+    font-size:12px;
+    font-weight:600;
+    text-align:left;
+    padding:2px 0;
+    cursor:pointer;
+  }
+  .hist-count{font-size:11.5px;color:var(--ink-soft);margin-bottom:8px;}
+  .hist-date-group{margin-bottom:6px;}
+  .hist-date-heading{
+    font-size:12px;
+    font-weight:700;
+    color:var(--navy);
+    background:#eef2f7;
+    padding:6px 8px;
+    border-radius:6px;
+    margin:10px 0 4px;
+  }
+  .history-entry{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:11px 4px;
+    border-bottom:1px solid var(--line);
+    font-size:13px;
+  }
+  .history-entry .meta{color:var(--ink-soft);font-size:11.5px;}
+  .history-entry .badge{
+    font-size:10.5px;
+    font-weight:700;
+    padding:3px 8px;
+    border-radius:12px;
+    color:#fff;
+  }
+  .close-x{
+    position:absolute;
+    top:12px;right:14px;
+    background:none;
+    border:none;
+    font-size:22px;
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .empty-hist{text-align:center;color:var(--ink-soft);font-size:13px;padding:20px 0;}
+  .link-btn{
+    background:none;border:none;color:var(--steel);
+    font-size:11.5px;font-weight:700;padding:0;cursor:pointer;
+    text-decoration:underline;
+  }
+  .pdf-fallback{
+    display:none;
+    position:fixed;
+    left:0;right:0;
+    bottom:0;
+    background:var(--navy);
+    color:#fff;
+    padding:14px 14px calc(14px + env(safe-area-inset-bottom, 0px));
+    z-index:70;
+    max-width:640px;
+    margin:0 auto;
+    box-shadow:0 -6px 24px rgba(0,0,0,.35);
+  }
+  .pdf-fallback.show{display:block;}
+  .pdf-fallback p{margin:0 0 10px;font-size:12.5px;line-height:1.4;color:#dfe6f1;}
+  .pdf-fallback .row{display:flex;gap:8px;}
+  .pdf-fallback .send{
+    flex:1.4;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    background:#25a35a;
+    color:#fff;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .pdf-fallback a{
+    flex:1;
+    display:block;
+    text-align:center;
+    padding:12px;
+    border-radius:10px;
+    background:var(--amber);
+    color:#1c1204;
+    font-size:14px;
+    font-weight:700;
+    text-decoration:none;
+  }
+  .pdf-fallback button{
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,.25);
+    background:transparent;
+    color:#fff;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .offline-note{
+    text-align:center;
+    font-size:10.5px;
+    color:var(--ink-soft);
+    padding:0 12px 6px;
+  }
+</style>
+<style>
+/* --- ajustes para iPhone --- */
+/* Safari no siempre abre la camara si el input file esta en display:none */
+.file-hidden{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;padding:0;margin:-1px;}
+label.photo-btn{cursor:pointer;-webkit-user-select:none;user-select:none;}
+/* las fotos verticales del iPhone no se acuestan */
+img{image-orientation:from-image;}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<header>
+  <div class="logo-row">
+    <div style="text-align:center;">
+      <div class="logo-360">360<span style="font-size:12px;vertical-align:top;">™</span></div>
+      <div class="logo-sub">ESTATES</div>
+    </div>
+  </div>
+  <h1>Vehicle Inspection Checklist<span style="display:block;font-size:11px;font-weight:400;letter-spacing:.02em;text-transform:none;color:#cfd8e6;margin-top:2px;">Lista de Verificación del Vehículo</span></h1>
+  <div class="mode-row">
+    <button type="button" class="mode-btn active" id="modeDaily" onclick="setMode('daily')">
+      Daily check<span>Chequeo diario</span>
+    </button>
+    <button type="button" class="mode-btn" id="modeWeekly" onclick="setMode('weekly')">
+      Full inspection<span>Inspección completa</span>
+    </button>
+  </div>
+  <div class="due-banner" id="dueBanner" hidden onclick="setMode('weekly')"></div>
+  <div class="top-fields">
+    <div class="full">
+      <label>Driver Name / Nombre del Conductor</label>
+      <select id="fDriver"></select>
+      <input type="text" id="fDriverOther" placeholder="Type full name / Escribe el nombre" hidden>
+    </div>
+    <div class="full">
+      <label>Vehicle / Vehículo</label>
+      <select id="fVehicle"></select>
+      <input type="text" id="fVehicleOther" placeholder="Make / Model / Year" hidden>
+    </div>
+    <div>
+      <label>VIN or Unit # · VIN o Unidad #</label>
+      <input type="text" id="fVin" placeholder="VIN / unit #">
+    </div>
+    <div>
+      <label>Odometer (km) · Odómetro (km)</label>
+      <input type="number" id="fOdo" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 84210">
+    </div>
+    <div>
+      <label>Date / Fecha</label>
+      <input type="date" id="fDate">
+    </div>
+    <div>
+      <label>Fuel level · Combustible</label>
+      <select id="fFuel">
+        <option value="">—</option>
+        <option value="E">E (empty / vacío)</option>
+        <option value="1/4">1/4</option>
+        <option value="1/2">1/2</option>
+        <option value="3/4">3/4</option>
+        <option value="F">F (full / lleno)</option>
+      </select>
+    </div>
+    <div class="odo-warn" id="odoWarn"></div>
+    <div class="full">
+      <label>Zone / Zona (internal, optional)</label>
+      <select id="fZone">
+        <option value="">—</option>
+        <option>Norte</option>
+        <option>Centro</option>
+        <option>Sur</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<div class="warn-banner">
+  <h3>⚠ Damage Liability Notice / Aviso de Responsabilidad</h3>
+  <p><strong>EN:</strong> Photos of the interior cleanliness and of any physical damage are <strong>mandatory</strong>. The day cannot be closed without them. If the driver does not submit the proper report with photos, the driver will be held responsible for the cost of any damage found afterwards.</p>
+  <p><strong>ES:</strong> Las fotos de la limpieza interior y de cualquier daño físico son <strong>obligatorias</strong>. No se puede cerrar el día sin ellas. Si el conductor no entrega el debido reporte con fotos, el conductor se hará cargo del pago de los daños que se encuentren después.</p>
+</div>
+
+<main id="checklistRoot"></main>
+
+<div class="toast" id="toast"></div>
+
+<div class="pdf-fallback" id="pdfFallback">
+  <p id="pdfFallbackMsg">PDF ready. Send it to the group or open it.<br>PDF listo. Envíalo al grupo o ábrelo.</p>
+  <div class="row">
+    <button type="button" id="pdfShareBtn" class="send" onclick="sharePDF()" hidden>📤 Send / Enviar</button>
+    <a id="pdfFallbackLink" href="#" target="_blank" rel="noopener">Open / Abrir</a>
+    <button type="button" onclick="hidePdfFallback()">✕</button>
+  </div>
+</div>
+
+<div class="history-panel" id="historyPanel">
+  <div class="history-sheet">
+    <button class="close-x" onclick="toggleHistory(false)">×</button>
+    <h3>Inspection History</h3>
+    <div class="hist-filters">
+      <input type="text" id="histSearch" placeholder="Search driver, vehicle, VIN..." oninput="renderHistory()">
+      <div class="row">
+        <div class="date-field">
+          <label>From</label>
+          <input type="date" id="histDateFrom" onchange="renderHistory()">
+        </div>
+        <div class="date-field">
+          <label>To</label>
+          <input type="date" id="histDateTo" onchange="renderHistory()">
+        </div>
+      </div>
+      <button class="hist-clear-btn" onclick="clearHistoryFilters()">Clear filters</button>
+    </div>
+    <div class="hist-count" id="histCount"></div>
+    <div id="historyList"></div>
+  </div>
+</div>
+
+<div class="summary-bar">
+  <div class="summary-stats">
+    <span><i class="dot yes"></i><span id="cntYes">0</span> Yes</span>
+    <span><i class="dot no"></i><span id="cntNo">0</span> No</span>
+    <span><i class="dot pending"></i><span id="cntPending">0</span> Pending</span>
+    <button class="link-btn" type="button" onclick="newInspection()">New / Nuevo</button>
+  </div>
+  <div class="action-row">
+    <button class="btn btn-ghost" onclick="toggleHistory(true)">History</button>
+    <button class="btn btn-secondary" onclick="saveInspection()">Save</button>
+    <button class="btn btn-primary" onclick="generatePDF()">PDF</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   EDIT HERE — drivers and fleet. Replace with the real names
+   and units. Everything else in the file adapts on its own.
+   EDITA AQUÍ — conductores y flota. Reemplaza con los nombres
+   y unidades reales. El resto del archivo se adapta solo.
+   ============================================================ */
+const DRIVERS = [
+  "Driver 1",
+  "Driver 2",
+  "Driver 3",
+  "Driver 4",
+  "Driver 5",
+  "Driver 6",
+  "Driver 7",
+  "Driver 8",
+  "Driver 9",
+  "Driver 10",
+  "Driver 11",
+];
+
+const FLEET = [
+  // unit  = plate or internal number (goes to "VIN or Unit #")
+  // desc  = make / model / year   (goes to "Make / Model / Year")
+  { unit:"V1", desc:"Vehicle 1 - make/model/year" },
+  { unit:"V2", desc:"Vehicle 2 - make/model/year" },
+  { unit:"V3", desc:"Vehicle 3 - make/model/year" },
+  { unit:"V4", desc:"Vehicle 4 - make/model/year" },
+  { unit:"V5", desc:"Vehicle 5 - make/model/year" },
+  { unit:"V6", desc:"Vehicle 6 - make/model/year" },
+];
+/* ========================= end of edit block ================ */
+
+const SECTIONS = [
+  { key:"documentation", title:"Documentation", titleEs:"Documentación", colLabel:"Checked", items:[
+    {k:"d1", en:"Manufacturer's handbook", es:"Manual del fabricante"},
+    {k:"d2", en:"Service record book (up-to-date)", es:"Libro de registro de servicio (actualizado)"},
+    {k:"d3", en:"Company driver's handbook", es:"Manual del conductor de la empresa"},
+    {k:"d4", en:"Accident report form", es:"Formulario de reporte de accidentes"},
+    {k:"d5", en:"Copy of annual safety inspection (sticker or form)", es:"Copia de la inspección de seguridad anual (calcomanía o formulario)"},
+  ]},
+  { key:"interior", title:"Vehicle Interior", titleEs:"Interior del Vehículo", colLabel:"Satisfactory", items:[
+    {k:"i1", en:"Heating", es:"Calefacción"},
+    {k:"i2", en:"Air Conditioning", es:"Aire acondicionado"},
+    {k:"i3", en:"Windshield defogging system", es:"Sistema desempañador del parabrisas"},
+    {k:"i4", en:"Window operation", es:"Funcionamiento de las ventanas"},
+    {k:"i5", en:"Door handles / locks", es:"Manijas / seguros de las puertas"},
+    {k:"i6", en:"Alarm", es:"Alarma"},
+    {k:"i7", en:"Seats", es:"Asientos"},
+    {k:"i8", en:"Seat belts work and free of damage / excessive wear", es:"Cinturones de seguridad funcionan y sin daños / desgaste excesivo", daily:true},
+    {k:"i9", en:"Interior Lights", es:"Luces interiores"},
+    {k:"i10", en:"Mirrors are in good position and properly adjusted", es:"Espejos en buena posición y bien ajustados"},
+    {k:"i11", en:"No warning lights are on", es:"Ninguna luz de advertencia encendida", daily:true},
+    {k:"i12", en:"Fuel levels", es:"Nivel de combustible"},
+    {k:"i13", en:"Oil level is sufficiently high", es:"Nivel de aceite suficientemente alto"},
+    {k:"i14", en:"Washer fluid levels are sufficiently high", es:"Nivel del líquido limpiaparabrisas suficientemente alto"},
+    {k:"i15", en:"Radiator fluid levels are sufficient", es:"Nivel del líquido del radiador suficiente"},
+    {k:"i16", en:"Emergency roadside supplies are properly stocked and located in the trunk of vehicle", es:"Suministros de emergencia bien surtidos y ubicados en el maletero del vehículo"},
+  ]},
+  { key:"cleanliness", title:"Interior Cleanliness", titleEs:"Limpieza Interior", colLabel:"Satisfactory", items:[
+    {k:"c1", en:"Cabin free of trash and personal items", es:"Cabina sin basura ni objetos personales", requirePhoto:true, daily:true},
+    {k:"c2", en:"Floor and mats clean", es:"Piso y tapetes limpios", requirePhoto:true, daily:true},
+    {k:"c3", en:"Seats and upholstery clean, no stains", es:"Asientos y tapicería limpios, sin manchas", requirePhoto:true},
+    {k:"c4", en:"Dashboard and surfaces wiped", es:"Tablero y superficies limpios", requirePhoto:true},
+    {k:"c5", en:"Windows clean on the inside", es:"Vidrios limpios por dentro", requirePhoto:true},
+    {k:"c6", en:"Cargo area / trunk clean and dry", es:"Zona de carga / maletero limpio y seco", requirePhoto:true, daily:true},
+    {k:"c7", en:"Clean linen kept separate from garbage", es:"Lencería limpia separada de la basura", requirePhoto:true, daily:true},
+    {k:"c8", en:"No garbage bags left inside the vehicle", es:"Sin bolsas de basura dejadas dentro del vehículo", requirePhoto:true, daily:true},
+    {k:"c9", en:"No bad odour inside the vehicle", es:"Sin malos olores dentro del vehículo", requirePhoto:true},
+  ], photoSlots:"clean", note:"3 cleanliness photos below are mandatory. Any item marked NO also needs its own photo." },
+  { key:"exterior", title:"Vehicle Exterior", titleEs:"Exterior del Vehículo", colLabel:"Satisfactory", items:[
+    {k:"e1", en:"Windows/windshield not severely cracked", es:"Ventanas/parabrisas sin grietas severas", daily:true},
+    {k:"e2", en:"Functional windshield wipers", es:"Limpiaparabrisas funcionando", daily:true},
+    {k:"e3", en:"Headlights (high/low beam)", es:"Faros delanteros (luces altas/bajas)", daily:true},
+    {k:"e4", en:"Tail lights / brake lights", es:"Luces traseras / luces de freno", daily:true},
+    {k:"e5", en:"Emergency brake in good working order", es:"Freno de emergencia en buen estado", daily:true},
+    {k:"e6", en:"Power brakes are in good working order", es:"Frenos hidráulicos en buen estado"},
+    {k:"e7", en:"Horn", es:"Bocina", daily:true},
+    {k:"e8", en:"Tires in good shape (no damage / bald tires / properly inflated)", es:"Llantas en buen estado (sin daños / desgaste / bien infladas)", daily:true},
+    {k:"e9", en:"No air leaks (walk around the vehicle and listen for air leaks while driver applies the brakes)", es:"Sin fugas de aire (caminar alrededor del vehículo y escuchar mientras el conductor frena)"},
+    {k:"e10", en:"No oil / grease leaks (at wheel seals or under the vehicle)", es:"Sin fugas de aceite / grasa (en sellos de rueda o debajo del vehículo)", daily:true},
+    {k:"e11", en:"No fuel leaks or odour of gasoline detected", es:"Sin fugas de combustible ni olor a gasolina"},
+    {k:"e12", en:"Mirrors are in good position and properly adjusted", es:"Espejos en buena posición y bien ajustados", daily:true},
+    {k:"e13", en:"Exhaust system is in good working order", es:"Sistema de escape en buen estado"},
+    {k:"e14", en:"Wheels and fasteners are fitted tightly", es:"Ruedas y tuercas bien ajustadas"},
+    {k:"e15", en:"Turn signals", es:"Direccionales", daily:true},
+    {k:"e16", en:"Vehicle is free of excessive damage", es:"Vehículo libre de daños excesivos"},
+    {k:"e17", en:"All loads are fastened / secured appropriately", es:"Toda carga bien sujeta / asegurada"},
+    {k:"e18", en:"Vehicle condition is satisfactory", es:"Condición del vehículo satisfactoria"},
+    {k:"e19", en:"Defects reported", es:"Defectos reportados", flagOn:"yes"},
+  ]},
+  { key:"engine", title:"Engine Compartment", titleEs:"Compartimento del Motor", colLabel:"Satisfactory", items:[
+    {k:"g1", en:"Engine oil level", es:"Nivel de aceite del motor"},
+    {k:"g2", en:"Coolant level (anti-freeze)", es:"Nivel de refrigerante (anticongelante)"},
+    {k:"g3", en:"Battery secured", es:"Batería asegurada"},
+    {k:"g4", en:"Brake fluid level", es:"Nivel de líquido de frenos"},
+    {k:"g5", en:"Transmission fluid level", es:"Nivel de líquido de transmisión"},
+    {k:"g6", en:"Windshield washer bottle full with correct fluid", es:"Depósito del limpiaparabrisas lleno con el líquido correcto"},
+  ]},
+  { key:"damage", title:"Physical Damage — Evidence Required", titleEs:"Daños Físicos — Evidencia Obligatoria", colLabel:"Damage?", note:"Every YES needs a photo. Without the proper report the driver is liable for the damage.", items:[
+    {k:"p1", en:"Body damage (dents, scratches, bumper)", es:"Daño en carrocería (golpes, rayones, parachoques)", flagOn:"yes", requirePhoto:true, daily:true},
+    {k:"p2", en:"Glass, mirrors or lights broken or cracked", es:"Vidrios, espejos o luces rotos o agrietados", flagOn:"yes", requirePhoto:true, daily:true},
+    {k:"p3", en:"Interior damage (seats, panels, upholstery)", es:"Daño interior (asientos, paneles, tapicería)", flagOn:"yes", requirePhoto:true, daily:true},
+    {k:"p4", en:"Damage to cargo area / trunk", es:"Daño en zona de carga / maletero", flagOn:"yes", requirePhoto:true, daily:true},
+    {k:"p5", en:"This damage is new (not reported before)", es:"Este daño es nuevo (no reportado antes)", flagOn:"yes", daily:true},
+  ]},
+];
+
+const STORAGE_KEY = "checklist_vehiculos_360_history";
+const DRAFT_KEY = "checklist_vehiculos_360_draft";
+const ODO_KEY = "checklist_vehiculos_360_lastodo";
+const ME_KEY = "checklist_vehiculos_360_me";
+const HISTORY_DAYS = 30;      // inspections older than this are deleted automatically
+const PHOTO_MAX_PX = 800;     // photo size stored (smaller = more inspections fit)
+const PHOTO_QUALITY = 0.6;
+const VEHICLE_PHOTO_SLOTS = [
+  {k:"front", en:"Front", label:"Front / Frente"},
+  {k:"rear", en:"Rear", label:"Rear / Atrás"},
+  {k:"left", en:"Left Side", label:"Left Side / Lateral Izq."},
+  {k:"right", en:"Right Side", label:"Right Side / Lateral Der."},
+  {k:"odometer", en:"Odometer", label:"Odometer / Odómetro"},
+  {k:"dashboard", en:"Dashboard", label:"Dashboard / Tablero"},
+];
+const CLEAN_PHOTO_SLOTS = [
+  {k:"clean_cabin", en:"Cabin / interior", label:"Cabin / Cabina"},
+  {k:"clean_floor", en:"Floor and mats", label:"Floor & mats / Piso y tapetes"},
+  {k:"clean_trunk", en:"Cargo area / trunk", label:"Trunk / Maletero"},
+];
+const ALL_PHOTO_SLOTS = VEHICLE_PHOTO_SLOTS.concat(CLEAN_PHOTO_SLOTS);
+
+const WARNING_EN = "Photos of the interior cleanliness and of any physical damage are MANDATORY. The day cannot be closed without them. If the driver does not submit the proper report with photos, the driver will be held responsible for the cost of any damage found afterwards.";
+const WARNING_ES = "Las fotos de la limpieza interior y de cualquier daño físico son OBLIGATORIAS. No se puede cerrar el día sin ellas. Si el conductor no entrega el debido reporte con fotos, el conductor se hará cargo del pago de los daños que se encuentren después.";
+
+let state = {};
+let vehiclePhotos = {};
+let ackAt = "";
+let mode = "daily";          // "daily" = short pre-shift check, "weekly" = full inspection
+const MODE_KEY = "checklist_vehiculos_360_mode";
+const WEEKLY_DUE_DAYS = 7;
+
+// Sections/items that belong to the current mode.
+function sectionsFor(m){
+  if(m === "weekly") return SECTIONS;
+  return SECTIONS
+    .map(sec => Object.assign({}, sec, { items: sec.items.filter(it => it.daily) }))
+    .filter(sec => sec.items.length);
+}
+
+function itemsFor(m){ return sectionsFor(m).flatMap(s => s.items); }
+
+function initState(){
+  state = {};
+  SECTIONS.forEach(sec => sec.items.forEach(it => {
+    state[it.k] = { status:null, note:"", photos:[] };
+  }));
+  vehiclePhotos = {};
+  ALL_PHOTO_SLOTS.forEach(slot => { vehiclePhotos[slot.k] = []; });
+  ackAt = "";
+}
+
+function toggleExtra(k){
+  document.getElementById(`extra-${k}`).classList.toggle("show");
+}
+
+function addVehiclePhoto(slotKey, input){
+  const file = input.files[0];
+  if(!file) return;
+  input.value = "";
+  compressImage(file, PHOTO_MAX_PX, PHOTO_QUALITY)
+    .then(dataUrl => {
+      vehiclePhotos[slotKey].push(dataUrl);
+      renderVehiclePhotos(slotKey);
+      refreshEvidenceFlags();
+      if(typeof scheduleDraftSave === "function") scheduleDraftSave();
+    })
+    .catch(err => {
+      console.error("Photo compression failed:", err);
+      showToast("Could not process the photo, try again");
+    });
+}
+
+function renderVehiclePhotos(slotKey){
+  const row = document.getElementById(`photos-vp-${slotKey}`);
+  row.querySelectorAll(".photo-thumb-wrap").forEach(el => el.remove());
+  vehiclePhotos[slotKey].forEach((p, idx) => {
+    const wrap = document.createElement("div");
+    wrap.className = "photo-thumb-wrap";
+    wrap.innerHTML = `<img src="${p}" class="photo-thumb"><button class="rm" onclick="removeVehiclePhoto('${slotKey}',${idx})">×</button>`;
+    row.insertBefore(wrap, row.firstChild);
+  });
+}
+
+function removeVehiclePhoto(slotKey, idx){
+  vehiclePhotos[slotKey].splice(idx, 1);
+  renderVehiclePhotos(slotKey);
+  refreshEvidenceFlags();
+  if(typeof scheduleDraftSave === "function") scheduleDraftSave();
+}
+
+function itemFlagOn(it){ return it.flagOn || "no"; }
+
+function allItems(){ return itemsFor(mode); }
+
+// Items answered in the "problem" direction that require photo evidence and have none.
+function missingEvidence(items){
+  return allItems().filter(it => {
+    if(!it.requirePhoto) return false;
+    const s = items[it.k];
+    if(!s || s.status !== itemFlagOn(it)) return false;
+    return !(s.photos && s.photos.length);
+  });
+}
+
+// Mandatory cleanliness photos that have not been taken yet.
+function missingCleanPhotos(vPhotos){
+  const src = vPhotos || vehiclePhotos;
+  return CLEAN_PHOTO_SLOTS.filter(slot => !(src[slot.k] && src[slot.k].length));
+}
+
+function refreshEvidenceFlags(){
+  allItems().forEach(it => {
+    if(!it.requirePhoto) return;
+    const el = document.getElementById(`item-${it.k}`);
+    if(!el) return;
+    const s = state[it.k];
+    const needs = s.status === itemFlagOn(it) && !(s.photos && s.photos.length);
+    el.classList.toggle("needs-photo", needs);
+  });
+  CLEAN_PHOTO_SLOTS.forEach(slot => {
+    const el = document.getElementById(`slot-${slot.k}`);
+    if(!el) return;
+    el.classList.toggle("slot-missing", !(vehiclePhotos[slot.k] && vehiclePhotos[slot.k].length));
+  });
+}
+
+function render(){
+  const root = document.getElementById("checklistRoot");
+  root.innerHTML = "";
+
+  const overviewSec = document.createElement("div");
+  overviewSec.className = "section";
+  const slotHtml = (slots, required) => slots.map(slot => `
+    <div class="overview-slot${required ? " slot-missing" : ""}" id="slot-${slot.k}">
+      <div class="overview-slot-label">${slot.label}</div>
+      ${required ? '<span class="slot-req">REQUIRED / OBLIGATORIA</span>' : ""}
+      <div class="photo-row" id="photos-vp-${slot.k}">
+        <label class="photo-btn">
+          📷 Photo
+          <input type="file" accept="image/*" class="file-hidden" onchange="addVehiclePhoto('${slot.k}', this)">
+        </label>
+      </div>
+    </div>
+  `).join("");
+  const shotsHtml = slotHtml(VEHICLE_PHOTO_SLOTS, false);
+  overviewSec.innerHTML = `
+    <div class="section-head">
+      <h2>Vehicle Overview Photos<span class="es">Fotos Generales del Vehículo</span></h2>
+      <span class="section-count">optional</span>
+    </div>
+    <div class="overview-grid">${shotsHtml}</div>
+  `;
+  root.appendChild(overviewSec);
+
+  sectionsFor(mode).forEach(sec => {
+    const secEl = document.createElement("div");
+    secEl.className = "section";
+    secEl.innerHTML = `
+      <div class="section-head">
+        <h2>${sec.title}<span class="es">${sec.titleEs}</span></h2>
+        <span class="section-count">${sec.items.length} items</span>
+      </div>
+      ${sec.note ? `<div class="sec-note">⚠ ${sec.note}</div>` : ""}
+      ${sec.photoSlots === "clean" ? `<div class="overview-grid">${slotHtml(CLEAN_PHOTO_SLOTS, true)}</div>` : ""}
+    `;
+    sec.items.forEach(it => {
+      const itemEl = document.createElement("div");
+      itemEl.className = "item";
+      itemEl.id = `item-${it.k}`;
+      itemEl.innerHTML = `
+        <div class="item-label">${it.en}<span class="es">${it.es}</span>${it.requirePhoto ? `<span class="req-tag">\ud83d\udcf7 ${itemFlagOn(it) === "yes" ? "Photo required if YES / Foto obligatoria si es SÍ" : "Photo required if NO / Foto obligatoria si es NO"}</span>` : ''}</div>
+        <div class="status-row">
+          <button class="status-btn yes" data-k="${it.k}" data-v="yes">${sec.key === "damage" ? "Yes / Sí" : "Yes"}</button>
+          <button class="status-btn no" data-k="${it.k}" data-v="no">${sec.key === "damage" ? "No" : "No"}</button>
+        </div>
+        <button class="toggle-extra-btn" id="toggle-${it.k}" onclick="toggleExtra('${it.k}')">＋ Photo / note</button>
+        <div class="item-extra" id="extra-${it.k}">
+          <textarea placeholder="${it.requirePhoto ? 'Describe the damage and where it is — in English' : 'Note — please write in English (e.g. Front-left tire worn)'}" id="note-${it.k}"></textarea>
+          <div class="photo-row" id="photos-${it.k}">
+            <label class="photo-btn">
+              📷 Photo
+              <input type="file" accept="image/*" class="file-hidden" onchange="addPhoto('${it.k}', this)">
+            </label>
+          </div>
+        </div>
+      `;
+      secEl.appendChild(itemEl);
+    });
+    root.appendChild(secEl);
+  });
+
+  const commentsSec = document.createElement("div");
+  commentsSec.className = "section";
+  commentsSec.innerHTML = `
+    <div class="section-head">
+      <h2>Additional Comments<span class="es">Comentarios Adicionales</span></h2>
+      <span class="section-count">English</span>
+    </div>
+    <div class="comments-box">
+      <textarea id="fComments" placeholder="General notes about this vehicle — please write in English"></textarea>
+    </div>
+  `;
+  root.appendChild(commentsSec);
+
+  const ackSec = document.createElement("div");
+  ackSec.className = "section";
+  ackSec.id = "ackBlock";
+  ackSec.innerHTML = `
+    <div class="section-head">
+      <h2>Damage Liability<span class="es">Responsabilidad por Daños</span></h2>
+      <span class="section-count">required</span>
+    </div>
+    <div class="ack-box">
+      <div class="ack-row">
+        <input type="checkbox" id="fAck">
+        <label for="fAck">I have read and accept the damage liability notice, and I confirm this report and its photos are complete and true.
+          <span class="es">He leído y acepto el aviso de responsabilidad por daños, y confirmo que este reporte y sus fotos están completos y son verídicos.</span>
+        </label>
+      </div>
+      <div class="ack-stamp" id="ackStamp"></div>
+    </div>
+  `;
+  root.appendChild(ackSec);
+
+  const ackBox = ackSec.querySelector("#fAck");
+  ackBox.addEventListener("change", () => {
+    ackAt = ackBox.checked ? new Date().toISOString() : "";
+    document.getElementById("ackStamp").textContent = ackBox.checked
+      ? "Accepted / Aceptado: " + new Date().toLocaleString()
+      : "";
+    if(ackBox.checked) ackSec.classList.remove("ack-missing");
+  });
+
+  root.querySelectorAll(".status-btn").forEach(btn => {
+    btn.addEventListener("click", () => setStatus(btn.dataset.k, btn.dataset.v));
+  });
+
+  sectionsFor(mode).forEach(sec => sec.items.forEach(it => {
+    document.getElementById(`note-${it.k}`).addEventListener("input", e => {
+      state[it.k].note = e.target.value;
+      if(typeof scheduleDraftSave === "function") scheduleDraftSave();
+    });
+  }));
+}
+
+function setStatus(k, v){
+  state[k].status = v;
+  document.querySelectorAll(`.status-btn[data-k="${k}"]`).forEach(b => {
+    b.classList.toggle("active", b.dataset.v === v);
+  });
+  const it = SECTIONS.flatMap(s => s.items).find(i => i.k === k);
+  if(!it) return;
+  const extra = document.getElementById(`extra-${k}`);
+  const hasContent = state[k].note || (state[k].photos && state[k].photos.length);
+  extra.classList.toggle("show", v === itemFlagOn(it) || !!hasContent);
+  refreshEvidenceFlags();
+  updateSummary();
+  if(typeof scheduleDraftSave === "function") scheduleDraftSave();
+}
+
+function addPhoto(k, input){
+  const file = input.files[0];
+  if(!file) return;
+  input.value = "";
+  compressImage(file, PHOTO_MAX_PX, PHOTO_QUALITY)
+    .then(dataUrl => {
+      state[k].photos.push(dataUrl);
+      renderPhotos(k);
+      refreshEvidenceFlags();
+      if(typeof scheduleDraftSave === "function") scheduleDraftSave();
+    })
+    .catch(err => {
+      console.error("Photo compression failed:", err);
+      showToast("Could not process the photo, try again");
+    });
+}
+
+function compressImage(file, maxDim, quality){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("read failed"));
+    reader.onload = e => {
+      const img = new Image();
+      img.onerror = () => reject(new Error("image decode failed"));
+      img.onload = () => {
+        let { width, height } = img;
+        if(width > maxDim || height > maxDim){
+          const scale = Math.min(maxDim / width, maxDim / height);
+          width = Math.round(width * scale);
+          height = Math.round(height * scale);
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        try{
+          resolve(canvas.toDataURL("image/jpeg", quality));
+        }catch(err){
+          reject(err);
+        }
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderPhotos(k){
+  const row = document.getElementById(`photos-${k}`);
+  row.querySelectorAll(".photo-thumb-wrap").forEach(el => el.remove());
+  state[k].photos.forEach((p, idx) => {
+    const wrap = document.createElement("div");
+    wrap.className = "photo-thumb-wrap";
+    wrap.innerHTML = `<img src="${p}" class="photo-thumb"><button class="rm" onclick="removePhoto('${k}',${idx})">×</button>`;
+    row.insertBefore(wrap, row.firstChild);
+  });
+}
+
+function removePhoto(k, idx){
+  state[k].photos.splice(idx, 1);
+  renderPhotos(k);
+  refreshEvidenceFlags();
+  if(typeof scheduleDraftSave === "function") scheduleDraftSave();
+}
+
+function updateSummary(){
+  let yes=0, no=0, pending=0;
+  allItems().forEach(it => {
+    const s = state[it.k] || {};
+    if(s.status === "yes") yes++;
+    else if(s.status === "no") no++;
+    else pending++;
+  });
+  document.getElementById("cntYes").textContent = yes;
+  document.getElementById("cntNo").textContent = no;
+  document.getElementById("cntPending").textContent = pending;
+}
+
+function storageAvailable(){
+  try{
+    localStorage.setItem("__t","1");
+    localStorage.removeItem("__t");
+    return true;
+  }catch(e){ return false; }
+}
+
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2400);
+}
+
+function getHeader(){
+  return {
+    driver: pickValue("fDriver", "fDriverOther"),
+    vehicle: pickValue("fVehicle", "fVehicleOther"),
+    vin: document.getElementById("fVin").value.trim(),
+    odo: document.getElementById("fOdo").value,
+    date: document.getElementById("fDate").value,
+    zone: document.getElementById("fZone").value,
+    fuel: document.getElementById("fFuel") ? document.getElementById("fFuel").value : "",
+    comments: document.getElementById("fComments") ? document.getElementById("fComments").value.trim() : "",
+    ackAccepted: document.getElementById("fAck") ? document.getElementById("fAck").checked : false,
+    ackAt: ackAt,
+  };
+}
+
+function validateHeader(h){
+  if(!h.driver || !h.vehicle || !h.date){
+    showToast("Missing: driver name, vehicle, or date");
+    return false;
+  }
+  return true;
+}
+
+function validateEvidence(){
+  refreshEvidenceFlags();
+
+  const missingClean = missingCleanPhotos();
+  if(missingClean.length){
+    const el = document.getElementById(`slot-${missingClean[0].k}`);
+    if(el) el.scrollIntoView({ behavior:"smooth", block:"center" });
+    showToast(`Cleanliness photo required: ${missingClean[0].en} / Foto obligatoria`);
+    return false;
+  }
+
+  const missing = missingEvidence(state);
+  if(missing.length){
+    const first = document.getElementById(`item-${missing[0].k}`);
+    if(first){
+      const extra = document.getElementById(`extra-${missing[0].k}`);
+      if(extra) extra.classList.add("show");
+      first.scrollIntoView({ behavior:"smooth", block:"center" });
+    }
+    showToast(`Photo required: ${missing[0].en} / Foto obligatoria`);
+    return false;
+  }
+  return true;
+}
+
+function validateAck(){
+  const box = document.getElementById("fAck");
+  if(box && box.checked) return true;
+  const el = document.getElementById("ackBlock");
+  if(el) el.scrollIntoView({ behavior:"smooth", block:"center" });
+  if(el) el.classList.add("ack-missing");
+  showToast("You must accept the damage liability notice / Debes aceptar el aviso");
+  return false;
+}
+
+function saveInspection(){
+  const h = getHeader();
+  if(!validateHeader(h)) return;
+  if(!validateEvidence()) return;
+  if(!validateAck()) return;
+
+  const record = {
+    id: Date.now(),
+    header: h,
+    items: JSON.parse(JSON.stringify(state)),
+    vehiclePhotos: JSON.parse(JSON.stringify(vehiclePhotos)),
+    mode: mode,
+    savedAt: new Date().toISOString(),
+  };
+
+  purgeOldHistory();
+  const history = getHistory();
+  history.unshift(record);
+
+  let dropped = 0;
+  while(history.length){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+      clearDraft();
+      rememberOdometer(h);
+      showToast(dropped
+        ? `Saved ✓ (${dropped} oldest report${dropped===1?"":"s"} removed, storage full)`
+        : "Inspection saved ✓");
+      return;
+    }catch(err){
+      if(history.length === 1) break;
+      history.pop();   // drop the oldest report and try again
+      dropped++;
+    }
+  }
+  showToast("Could not save: this inspection is too large for the phone");
+}
+
+function getHistory(){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  }catch(e){ return []; }
+}
+
+// Drop inspections older than HISTORY_DAYS so photos never fill up the phone.
+function purgeOldHistory(){
+  const history = getHistory();
+  const cutoff = Date.now() - HISTORY_DAYS * 86400000;
+  const kept = history.filter(r => {
+    const t = r.savedAt ? Date.parse(r.savedAt) : (r.id || 0);
+    return isNaN(t) ? true : t >= cutoff;
+  });
+  if(kept.length !== history.length){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(kept)); }catch(e){}
+  }
+  return history.length - kept.length;
+}
+
+function storageUsedBytes(){
+  let total = 0;
+  try{
+    for(const k of [STORAGE_KEY, DRAFT_KEY]){
+      const v = localStorage.getItem(k);
+      if(v) total += v.length;
+    }
+  }catch(e){}
+  return total;
+}
+
+function storageLine(){
+  const used = storageUsedBytes();
+  const mb = (used / 1048576).toFixed(1);
+  const pct = Math.min(100, Math.round(used / 52428.8));
+  return `Phone storage / Memoria: ${mb} MB used (${pct}%) - reports older than ${HISTORY_DAYS} days are deleted automatically`;
+}
+
+function overallBadge(items, recMode){
+  const list = itemsFor(recMode || "weekly");
+  let hasFlag = false, allAnswered = true;
+  list.forEach(it => {
+    const s = items[it.k];
+    if(!s || !s.status){ allAnswered = false; return; }
+    if(s.status === itemFlagOn(it)) hasFlag = true;
+  });
+  if(hasFlag) return {label:"Issues", color:"var(--bad)"};
+  if(!allAnswered) return {label:"Incomplete", color:"var(--steel)"};
+  return {label:"OK", color:"var(--ok)"};
+}
+
+function toggleHistory(show){
+  const panel = document.getElementById("historyPanel");
+  if(show){ purgeOldHistory(); renderHistory(); }
+  panel.classList.toggle("show", show);
+}
+
+function clearHistoryFilters(){
+  document.getElementById("histSearch").value = "";
+  document.getElementById("histDateFrom").value = "";
+  document.getElementById("histDateTo").value = "";
+  renderHistory();
+}
+
+function formatDateHeading(dateStr){
+  if(!dateStr) return "No date";
+  const d = new Date(dateStr + "T00:00:00");
+  if(isNaN(d)) return dateStr;
+  return d.toLocaleDateString("en-US", { weekday:"long", year:"numeric", month:"long", day:"numeric" });
+}
+
+function renderHistory(){
+  const list = document.getElementById("historyList");
+  const countEl = document.getElementById("histCount");
+  const all = getHistory();
+
+  if(all.length === 0){
+    list.innerHTML = `<div class="empty-hist">No saved inspections yet.</div>`;
+    countEl.textContent = storageLine();
+    return;
+  }
+
+  const search = (document.getElementById("histSearch").value || "").trim().toLowerCase();
+  const dateFrom = document.getElementById("histDateFrom").value;
+  const dateTo = document.getElementById("histDateTo").value;
+
+  let filtered = all.filter(rec => {
+    const h = rec.header || {};
+    if(dateFrom && (!h.date || h.date < dateFrom)) return false;
+    if(dateTo && (!h.date || h.date > dateTo)) return false;
+    if(search){
+      const haystack = [h.driver, h.vehicle, h.vin, h.zone].filter(Boolean).join(" ").toLowerCase();
+      if(!haystack.includes(search)) return false;
+    }
+    return true;
+  });
+
+  filtered.sort((a, b) => {
+    const da = a.header.date || "";
+    const db = b.header.date || "";
+    if(da !== db) return da < db ? 1 : -1;
+    return (b.savedAt || "").localeCompare(a.savedAt || "");
+  });
+
+  countEl.textContent = `Showing ${filtered.length} of ${all.length} report${all.length===1?"":"s"} - ` + storageLine();
+
+  if(filtered.length === 0){
+    list.innerHTML = `<div class="empty-hist">No reports match this search.</div>`;
+    return;
+  }
+
+  list.innerHTML = "";
+  let currentDate = null;
+  let groupEl = null;
+
+  filtered.forEach(rec => {
+    const recDate = rec.header.date || "";
+    if(recDate !== currentDate){
+      currentDate = recDate;
+      const heading = document.createElement("div");
+      heading.className = "hist-date-heading";
+      heading.textContent = formatDateHeading(recDate);
+      list.appendChild(heading);
+    }
+    const badge = overallBadge(rec.items, rec.mode);
+    const row = document.createElement("div");
+    row.className = "history-entry";
+    row.innerHTML = `
+      <div>
+        <div><strong>${rec.header.driver}</strong> · ${rec.header.vehicle}</div>
+        <div class="meta">${rec.header.vin ? rec.header.vin+" · " : ""}${rec.header.zone || "—"}<span class="mode-tag">${rec.mode === "weekly" ? "Full / Completa" : "Daily / Diario"}</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="badge" style="background:${badge.color}">${badge.label}</span>
+        <button class="photo-btn" style="padding:6px 10px;font-size:11px;" onclick="regeneratePDFFromRecord(${rec.id})">PDF</button>
+      </div>
+    `;
+    list.appendChild(row);
+  });
+}
+
+/* --- guardar el PDF cuando la pagina corre como artifact de Claude --- */
+let claudeDownloads = null;
+(function(){
+  try{
+    if(window.claude && typeof window.claude.use === "function"){
+      window.claude.use("downloads")
+        .then(function(d){ claudeDownloads = d || null; })
+        .catch(function(){ claudeDownloads = null; });
+    }
+  }catch(e){ claudeDownloads = null; }
+})();
+
+let lastPdfUrl = null;
+let lastPdfFile = null;
+
+function canSharePdf(){
+  try{
+    return !!(navigator.canShare && navigator.share &&
+      navigator.canShare({ files:[new File([new Blob(["x"],{type:"application/pdf"})], "t.pdf", { type:"application/pdf" })] }));
+  }catch(e){ return false; }
+}
+
+async function sharePDF(){
+  if(!lastPdfFile) return;
+  try{
+    await navigator.share({
+      files:[lastPdfFile],
+      title: lastPdfFile.name,
+      text: "Vehicle inspection - 360 Estates"
+    });
+    showToast("Sent ✓ / Enviado ✓");
+  }catch(err){
+    if(err && err.name === "AbortError") return;   // driver closed the share sheet
+    console.error("share failed:", err);
+    showToast("Could not share — use Open / Abrir");
+  }
+}
+
+function hidePdfFallback(){
+  document.getElementById("pdfFallback").classList.remove("show");
+  if(lastPdfUrl){
+    try{ URL.revokeObjectURL(lastPdfUrl); }catch(e){}
+    lastPdfUrl = null;
+  }
+  lastPdfFile = null;
+}
+
+function deliverPDF(doc, fname){
+  hidePdfFallback();
+
+  // En el visor de Claude las descargas normales no funcionan: se guarda por aqui.
+  if(claudeDownloads){
+    let b = null;
+    try{ b = doc.output("blob"); }catch(e){ b = null; }
+    if(b){
+      claudeDownloads.save({ filename: fname, data: b })
+        .then(function(){ showToast("PDF guardado \u2713 / Saved \u2713"); })
+        .catch(function(err){
+          const c = err && err.code;
+          if(c === "declined" || c === "rate_limited") return;
+          showToast("No se pudo guardar el PDF / Could not save the PDF");
+        });
+      return;
+    }
+  }
+
+  let blob;
+  try{
+    blob = doc.output("blob");
+  }catch(e){
+    doc.save(fname);
+    return;
+  }
+  let url;
+  try{
+    url = URL.createObjectURL(blob);
+  }catch(e){
+    doc.save(fname);
+    return;
+  }
+  lastPdfUrl = url;
+  try{
+    lastPdfFile = new File([blob], fname, { type:"application/pdf" });
+  }catch(e){ lastPdfFile = null; }
+
+  const shareBtn = document.getElementById("pdfShareBtn");
+  const canShare = !!lastPdfFile && canSharePdf();
+  shareBtn.hidden = !canShare;
+  document.getElementById("pdfFallbackMsg").innerHTML = canShare
+    ? "PDF ready. Send it to the group or open it.<br>PDF listo. Envíalo al grupo o ábrelo."
+    : "PDF ready. If it did not download, tap Open.<br>PDF listo. Si no se descargó, toca Abrir.";
+
+  const a = document.createElement("a");
+  const canDownload = ("download" in a);
+  if(canDownload){
+    a.href = url;
+    a.download = fname;
+    a.rel = "noopener";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    try{ a.click(); }catch(e){}
+    setTimeout(function(){ if(a.parentNode) a.parentNode.removeChild(a); }, 0);
+  }
+  const link = document.getElementById("pdfFallbackLink");
+  link.href = url;
+  try{ link.setAttribute("download", fname); }catch(e){}
+  document.getElementById("pdfFallback").classList.add("show");
+}
+
+function pdfReady(){
+  if(window.jspdf && window.jspdf.jsPDF) return true;
+  showToast("PDF engine not loaded — reopen the file");
+  return false;
+}
+
+async function generatePDF(){
+  if(!pdfReady()) return;
+  const h = getHeader();
+  if(!validateHeader(h)) return;
+  if(!validateEvidence()) return;
+  if(!validateAck()) return;
+  showToast("Generating PDF...");
+  try{
+    await buildAndSavePDF(h, state, vehiclePhotos, mode);
+    showToast("PDF generated ✓");
+  }catch(err){
+    console.error("PDF generation failed:", err);
+    showToast("Error generating PDF, try again");
+  }
+}
+
+async function regeneratePDFFromRecord(id){
+  if(!pdfReady()) return;
+  const history = getHistory();
+  const rec = history.find(r => r.id === id);
+  if(!rec) return;
+  showToast("Generating PDF...");
+  try{
+    await buildAndSavePDF(rec.header, rec.items, rec.vehiclePhotos || {}, rec.mode);
+    showToast("PDF regenerated from history ✓");
+  }catch(err){
+    console.error("PDF regeneration failed:", err);
+    showToast("Error generating PDF for that record");
+  }
+}
+
+function reencodeAsJpeg(dataUrl, maxDim, quality){
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onerror = () => resolve(null);
+    img.onload = () => {
+      let { width, height } = img;
+      if(width > maxDim || height > maxDim){
+        const scale = Math.min(maxDim / width, maxDim / height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+      try{
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      }catch(e){
+        resolve(null);
+      }
+    };
+    img.src = dataUrl;
+  });
+}
+
+async function normalizePhotoList(photos){
+  const fixed = [];
+  for(const p of (photos || [])){
+    const isPngOrJpeg = /^data:image\/(png|jpe?g)/i.test(p);
+    if(isPngOrJpeg){
+      fixed.push(p);
+    }else{
+      const converted = await reencodeAsJpeg(p, PHOTO_MAX_PX, PHOTO_QUALITY);
+      if(converted) fixed.push(converted);
+    }
+  }
+  return fixed;
+}
+
+async function normalizePhotosForPDF(items){
+  const normalized = {};
+  for(const k of Object.keys(items)){
+    const s = items[k];
+    normalized[k] = { ...s, photos: await normalizePhotoList(s.photos) };
+  }
+  return normalized;
+}
+
+function drawCheckbox(doc, x, y, checked, color){
+  doc.setDrawColor(140,140,140);
+  doc.setLineWidth(0.8);
+  doc.rect(x, y-7, 8, 8);
+  if(checked){
+    doc.setFillColor(color[0], color[1], color[2]);
+    doc.rect(x, y-7, 8, 8, 'F');
+  }
+}
+
+async function buildAndSavePDF(h, items, vPhotos, recMode){
+  const pdfMode = (recMode === "weekly") ? "weekly" : "daily";
+  const safeItems = await normalizePhotosForPDF(items);
+  const safeVehiclePhotos = {};
+  for(const slot of ALL_PHOTO_SLOTS){
+    safeVehiclePhotos[slot.k] = await normalizePhotoList((vPhotos || {})[slot.k]);
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit:"pt", format:"a4" });
+  const pageW = doc.internal.pageSize.getWidth();
+  const margin = 40;
+  let y = 50;
+
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(16);
+  doc.setTextColor(18,35,61);
+  doc.text("360 Estates", margin, y);
+  doc.setFontSize(10);
+  doc.setFont("helvetica","normal");
+  doc.setTextColor(90,90,90);
+  y += 16;
+  doc.text(pdfMode === "weekly"
+    ? "Full Vehicle Inspection - weekly"
+    : "Daily Vehicle Check", margin, y);
+  y += 24;
+
+  doc.setDrawColor(225,230,237);
+  doc.line(margin, y, pageW - margin, y);
+  y += 18;
+
+  doc.setFontSize(10.5);
+  doc.setTextColor(20,20,20);
+  const headerLines = [
+    `Driver Name: ${h.driver}`,
+    `Make / Model / Year: ${h.vehicle}`,
+    `VIN or Unit #: ${h.vin || "—"}`,
+    `Odometer Reading (km): ${h.odo || "—"}`,
+    `Date: ${h.date}`,
+    `Zone: ${h.zone || "—"}`,
+    `Fuel level: ${h.fuel || "—"}`,
+  ];
+  headerLines.forEach(line => { doc.text(line, margin, y); y += 15; });
+  y += 8;
+
+  const pdfSections = sectionsFor(pdfMode);
+  const damageItems = (pdfSections.find(s => s.key === "damage") || {items:[]}).items;
+  const damageFound = damageItems.filter(it => {
+    const s = safeItems[it.k];
+    return s && s.status === itemFlagOn(it);
+  });
+  if(damageFound.length){
+    doc.setFillColor(250, 233, 230);
+    doc.rect(margin, y - 12, pageW - margin*2, 22, "F");
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(10.5);
+    doc.setTextColor(193,75,63);
+    doc.text("PHYSICAL DAMAGE REPORTED - see Physical Damage section for evidence", margin + 8, y + 2);
+    doc.setTextColor(20,20,20);
+    y += 26;
+  }
+
+  async function drawPhotoGroup(title, slots){
+    if(!slots.some(slot => safeVehiclePhotos[slot.k].length)) return;
+    if(y + 100 > 780){ doc.addPage(); y = 50; }
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(12);
+    doc.setTextColor(18,35,61);
+    doc.text(title, margin, y);
+    y += 14;
+    for(const slot of slots){
+      const photos = safeVehiclePhotos[slot.k];
+      if(!photos.length) continue;
+      if(y + 108 > 780){ doc.addPage(); y = 50; }
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(9);
+      doc.setTextColor(90,90,90);
+      doc.text(slot.en, margin, y);
+      y += 10;
+      let x = margin;
+      for(const p of photos){
+        if(x + 90 > pageW - margin){ x = margin; y += 98; }
+        const fmt = /^data:image\/png/i.test(p) ? "PNG" : "JPEG";
+        try{ doc.addImage(p, fmt, x, y, 90, 90); }catch(e){ console.warn("Could not embed photo:", e); }
+        x += 98;
+      }
+      y += 106;
+    }
+    y += 4;
+  }
+
+  await drawPhotoGroup("Interior Cleanliness Photos (mandatory)", CLEAN_PHOTO_SLOTS);
+
+  const anyVehiclePhotos = VEHICLE_PHOTO_SLOTS.some(slot => safeVehiclePhotos[slot.k].length);
+  if(anyVehiclePhotos){
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(12);
+    doc.setTextColor(18,35,61);
+    doc.text("Vehicle Overview Photos", margin, y);
+    y += 14;
+    for(const slot of VEHICLE_PHOTO_SLOTS){
+      const photos = safeVehiclePhotos[slot.k];
+      if(!photos.length) continue;
+      if(y + 78 > 780){ doc.addPage(); y = 50; }
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(9);
+      doc.setTextColor(90,90,90);
+      doc.text(slot.en, margin, y);
+      y += 10;
+      let x = margin;
+      for(const p of photos){
+        if(x + 90 > pageW - margin){ x = margin; y += 98; }
+        const fmt = /^data:image\/png/i.test(p) ? "PNG" : "JPEG";
+        try{ doc.addImage(p, fmt, x, y, 90, 90); }catch(e){ console.warn("Could not embed vehicle photo:", e); }
+        x += 98;
+      }
+      y += 106;
+    }
+    y += 4;
+  }
+
+  const yesBoxX = pageW - margin - 92;
+  const noBoxX = pageW - margin - 42;
+
+  const photosPerRow = Math.max(1, Math.floor((pageW - margin - (margin + 10)) / 68));
+
+  function itemBlockHeight(it, s){
+    doc.setFont("helvetica","normal");
+    doc.setFontSize(9.5);
+    let h = Math.max(doc.splitTextToSize(it.en, yesBoxX - margin - 15).length * 11, 13);
+    if(s && s.note){
+      doc.setFontSize(8.5);
+      h += doc.splitTextToSize(`Note: ${s.note}`, pageW - margin*2 - 20).length * 10 + 2;
+    }
+    if(s && s.photos && s.photos.length){
+      h += Math.ceil(s.photos.length / photosPerRow) * 68;
+    }
+    return h + 4;
+  }
+
+  for(const sec of pdfSections){
+    // keep a section heading with its first item (heading block is ~38pt)
+    const firstIt = sec.items[0];
+    const headBlock = 38 + (sec.key === "damage" ? 12 : 0) +
+      (firstIt ? itemBlockHeight(firstIt, safeItems[firstIt.k]) : 0);
+    if(y + headBlock > 790){ doc.addPage(); y = 50; }
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(12);
+    doc.setTextColor(18,35,61);
+    doc.text(sec.title, margin, y);
+    y += 6;
+    doc.setFontSize(8);
+    doc.setFont("helvetica","normal");
+    doc.setTextColor(150,150,150);
+    doc.text("Yes", yesBoxX + 11, y);
+    doc.text("No", noBoxX + 11, y);
+    y += 8;
+    doc.setDrawColor(225,230,237);
+    doc.line(margin, y, pageW - margin, y);
+    y += 12;
+    if(sec.key === "damage"){
+      doc.setFontSize(8);
+      doc.setTextColor(193,75,63);
+      doc.text("An evidence photo is required for every YES.", margin, y);
+      doc.setTextColor(30,30,30);
+      y += 17;
+    }
+
+    for(const it of sec.items){
+      const s = safeItems[it.k] || { status:null, note:"", photos:[] };
+
+      // keep label + note + evidence photos together on one page
+      if(y + itemBlockHeight(it, s) > 790){ doc.addPage(); y = 50; }
+
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(9.5);
+      const lines = doc.splitTextToSize(it.en, yesBoxX - margin - 15);
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(9.5);
+      doc.setTextColor(30,30,30);
+      doc.text(lines, margin, y);
+
+      const boxY = y - 3;
+      drawCheckbox(doc, yesBoxX, boxY, s.status === "yes", [63,145,96]);
+      drawCheckbox(doc, noBoxX, boxY, s.status === "no", [193,75,63]);
+
+      const rowHeight = Math.max(lines.length * 11, 13);
+      y += rowHeight;
+
+      if(s.note){
+        doc.setFontSize(8.5);
+        doc.setTextColor(90,90,90);
+        const noteLines = doc.splitTextToSize(`Note: ${s.note}`, pageW - margin*2 - 20);
+        doc.text(noteLines, margin + 10, y);
+        y += noteLines.length * 10 + 2;
+        doc.setTextColor(30,30,30);
+      }
+
+      if(s.photos && s.photos.length){
+        let x = margin + 10;
+        let rowUsed = false;
+        for(const p of s.photos){
+          if(x + 60 > pageW - margin){
+            x = margin + 10;
+            y += 68;
+          }
+          const fmt = /^data:image\/png/i.test(p) ? "PNG" : "JPEG";
+          try{
+            doc.addImage(p, fmt, x, y, 60, 60);
+            rowUsed = true;
+          }catch(e){
+            console.warn("Could not embed photo:", e);
+          }
+          x += 68;
+        }
+        if(rowUsed) y += 68;
+      }
+      y += 4;
+    }
+    y += 8;
+  }
+
+  if(h.comments){
+    if(y > 700){ doc.addPage(); y = 50; }
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(12);
+    doc.setTextColor(18,35,61);
+    doc.text("Additional Comments", margin, y);
+    y += 16;
+    doc.setFont("helvetica","normal");
+    doc.setFontSize(9.5);
+    doc.setTextColor(30,30,30);
+    const commentLines = doc.splitTextToSize(h.comments, pageW - margin*2);
+    doc.text(commentLines, margin, y);
+    y += commentLines.length * 11;
+  }
+
+  // Damage liability notice + driver acknowledgement
+  const noticeW = pageW - margin*2;
+  const enLines = doc.splitTextToSize(WARNING_EN, noticeW - 20);
+  const esLines = doc.splitTextToSize(WARNING_ES, noticeW - 20);
+  const boxH = 34 + enLines.length * 10 + 8 + esLines.length * 10 + 26;
+  if(y + boxH + 20 > 790){ doc.addPage(); y = 50; }
+  y += 14;
+  doc.setFillColor(251, 233, 230);
+  doc.setDrawColor(224, 168, 159);
+  doc.setLineWidth(1);
+  doc.rect(margin, y, noticeW, boxH, "FD");
+  let ny = y + 18;
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(10.5);
+  doc.setTextColor(193,75,63);
+  doc.text("DAMAGE LIABILITY NOTICE / AVISO DE RESPONSABILIDAD POR DAÑOS", margin + 10, ny);
+  ny += 14;
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(8.5);
+  doc.setTextColor(70,40,36);
+  doc.text(enLines, margin + 10, ny);
+  ny += enLines.length * 10 + 8;
+  doc.text(esLines, margin + 10, ny);
+  ny += esLines.length * 10 + 12;
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(9);
+  if(h.ackAccepted){
+    doc.setTextColor(63,145,96);
+    let stamp = "";
+    if(h.ackAt){
+      const d = new Date(h.ackAt);
+      if(!isNaN(d)) stamp = " - " + d.toLocaleString();
+    }
+    doc.text(`ACCEPTED by ${h.driver || "-"}${stamp}`, margin + 10, ny);
+  }else{
+    doc.setTextColor(193,75,63);
+    doc.text("NOT ACCEPTED BY THE DRIVER", margin + 10, ny);
+  }
+  y += boxH + 10;
+
+  const slug = t => (t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^A-Za-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 40);
+  const fname = `${pdfMode === "weekly" ? "FULL" : "daily"}_${slug(h.vin) || slug(h.vehicle) || "vehicle"}_${slug(h.driver)}_${h.date}.pdf`;
+  deliverPDF(doc, fname);
+}
+
+/* ---------- daily / weekly mode ---------- */
+function applyStateToDOM(){
+  Object.keys(state).forEach(k => {
+    const noteEl = document.getElementById(`note-${k}`);
+    if(!noteEl) return;                       // item not shown in this mode
+    const s = state[k];
+    noteEl.value = s.note || "";
+    if(s.photos && s.photos.length) renderPhotos(k);
+    if(s.status) setStatus(k, s.status);
+    else if(s.note || (s.photos && s.photos.length)){
+      document.getElementById(`extra-${k}`).classList.add("show");
+    }
+  });
+  Object.keys(vehiclePhotos).forEach(k => {
+    if(vehiclePhotos[k].length && document.getElementById(`photos-vp-${k}`)) renderVehiclePhotos(k);
+  });
+  const ackEl = document.getElementById("fAck");
+  if(ackEl && ackAt){
+    ackEl.checked = true;
+    const d = new Date(ackAt);
+    document.getElementById("ackStamp").textContent =
+      "Accepted / Aceptado: " + (isNaN(d) ? "-" : d.toLocaleString());
+  }
+  refreshEvidenceFlags();
+  updateSummary();
+}
+
+function setMode(m, silent){
+  mode = (m === "weekly") ? "weekly" : "daily";
+  try{ localStorage.setItem(MODE_KEY, mode); }catch(e){}
+  document.getElementById("modeDaily").classList.toggle("active", mode === "daily");
+  document.getElementById("modeWeekly").classList.toggle("active", mode === "weekly");
+  render();
+  applyStateToDOM();
+  if(!silent) showToast(mode === "weekly"
+    ? `Full inspection - ${itemsFor("weekly").length} items`
+    : `Daily check - ${itemsFor("daily").length} items`);
+  updateDueBanner();
+  if(typeof scheduleDraftSave === "function") scheduleDraftSave();
+}
+
+// Warn when this vehicle has not had a full inspection in WEEKLY_DUE_DAYS.
+function updateDueBanner(){
+  const banner = document.getElementById("dueBanner");
+  const vehicle = pickValue("fVehicle", "fVehicleOther");
+  if(!vehicle || mode === "weekly"){ banner.hidden = true; return; }
+  const cutoff = Date.now() - WEEKLY_DUE_DAYS * 86400000;
+  const last = getHistory()
+    .filter(r => r.mode === "weekly" && r.header && r.header.vehicle === vehicle)
+    .map(r => Date.parse(r.savedAt || 0))
+    .filter(t => !isNaN(t))
+    .sort((a,b) => b - a)[0];
+  if(last && last >= cutoff){ banner.hidden = true; return; }
+  const days = last ? Math.floor((Date.now() - last) / 86400000) : null;
+  banner.textContent = last
+    ? `⚠ Full inspection due — last one was ${days} days ago. Tap to switch. / Inspección completa vencida: hace ${days} días. Toca para cambiar.`
+    : "⚠ This vehicle has no full inspection on record. Tap to switch. / Este vehículo no tiene inspección completa registrada. Toca para cambiar.";
+  banner.hidden = false;
+}
+
+/* ---------- driver + fleet pickers ---------- */
+const OTHER = "__other__";
+
+function fillSelect(sel, values, placeholder){
+  sel.innerHTML = "";
+  const ph = document.createElement("option");
+  ph.value = "";
+  ph.textContent = placeholder;
+  sel.appendChild(ph);
+  values.forEach(v => {
+    const o = document.createElement("option");
+    o.value = v.value;
+    o.textContent = v.text;
+    sel.appendChild(o);
+  });
+  const other = document.createElement("option");
+  other.value = OTHER;
+  other.textContent = "Other / Otro…";
+  sel.appendChild(other);
+}
+
+function bindOther(selId, otherId){
+  const sel = document.getElementById(selId);
+  const other = document.getElementById(otherId);
+  sel.addEventListener("change", () => {
+    other.hidden = sel.value !== OTHER;
+    if(!other.hidden) other.focus();
+  });
+  other.hidden = sel.value !== OTHER;
+}
+
+function setupPickers(){
+  fillSelect(document.getElementById("fDriver"),
+    DRIVERS.map(d => ({ value:d, text:d })), "— Select driver / Selecciona —");
+  fillSelect(document.getElementById("fVehicle"),
+    FLEET.map(v => ({ value:v.desc, text:`${v.unit} — ${v.desc}` })), "— Select vehicle / Selecciona —");
+  bindOther("fDriver", "fDriverOther");
+  bindOther("fVehicle", "fVehicleOther");
+
+  // picking a vehicle fills its unit number and shows its last odometer
+  document.getElementById("fVehicle").addEventListener("change", e => {
+    const match = FLEET.find(v => v.desc === e.target.value);
+    const vin = document.getElementById("fVin");
+    if(match && !vin.value.trim()) vin.value = match.unit;
+    checkOdometer();
+    updateDueBanner();
+  });
+  document.getElementById("fOdo").addEventListener("input", checkOdometer);
+
+  // this phone belongs to one driver — remember who
+  try{
+    const me = localStorage.getItem(ME_KEY);
+    if(me && DRIVERS.indexOf(me) !== -1) document.getElementById("fDriver").value = me;
+  }catch(e){}
+  document.getElementById("fDriver").addEventListener("change", e => {
+    try{
+      if(e.target.value && e.target.value !== OTHER) localStorage.setItem(ME_KEY, e.target.value);
+    }catch(err){}
+  });
+}
+
+function pickValue(selId, otherId){
+  const sel = document.getElementById(selId);
+  if(!sel) return "";
+  if(sel.value === OTHER){
+    const other = document.getElementById(otherId);
+    return other ? other.value.trim() : "";
+  }
+  return sel.value.trim();
+}
+
+/* ---------- odometer sanity check against this vehicle's last reading ---------- */
+function getOdoMap(){
+  try{ return JSON.parse(localStorage.getItem(ODO_KEY)) || {}; }catch(e){ return {}; }
+}
+
+function rememberOdometer(h){
+  const odo = parseInt(h.odo, 10);
+  if(!h.vehicle || isNaN(odo)) return;
+  const map = getOdoMap();
+  map[h.vehicle] = { km:odo, date:h.date || "" };
+  try{ localStorage.setItem(ODO_KEY, JSON.stringify(map)); }catch(e){}
+}
+
+function checkOdometer(){
+  const box = document.getElementById("odoWarn");
+  const vehicle = pickValue("fVehicle", "fVehicleOther");
+  const odo = parseInt(document.getElementById("fOdo").value, 10);
+  const last = getOdoMap()[vehicle];
+  box.classList.remove("show");
+  if(!vehicle || isNaN(odo) || !last) return;
+  if(odo < last.km){
+    box.textContent = `⚠ Lower than the last reading for this vehicle (${last.km} km on ${last.date || "?"}). Check the number. / Menor que la última lectura — revisa el número.`;
+    box.classList.add("show");
+  }else if(odo - last.km > 1500){
+    box.textContent = `⚠ ${odo - last.km} km more than the last reading (${last.km} km on ${last.date || "?"}). Check the number. / Diferencia muy grande — revisa el número.`;
+    box.classList.add("show");
+  }
+}
+
+/* ---------- draft autosave (phones reload background tabs) ---------- */
+const HEADER_FIELDS = ["fDriver","fDriverOther","fVehicle","fVehicleOther","fVin","fOdo","fDate","fZone","fFuel","fComments"];
+let draftTimer = null;
+
+function collectDraft(){
+  const hdr = {};
+  HEADER_FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) hdr[id] = el.value;
+  });
+  const ackEl = document.getElementById("fAck");
+  return {
+    header:hdr,
+    items:state,
+    vehiclePhotos:vehiclePhotos,
+    ack:{ accepted: !!(ackEl && ackEl.checked), at: ackAt },
+    mode:mode,
+    at:Date.now()
+  };
+}
+
+function stripPhotos(draft){
+  const items = {};
+  Object.keys(draft.items).forEach(k => {
+    items[k] = { status:draft.items[k].status, note:draft.items[k].note, photos:[] };
+  });
+  const vp = {};
+  Object.keys(draft.vehiclePhotos).forEach(k => { vp[k] = []; });
+  return { header:draft.header, items:items, vehiclePhotos:vp, ack:draft.ack, mode:draft.mode, at:draft.at };
+}
+
+function saveDraft(){
+  const draft = collectDraft();
+  try{
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+  }catch(e){
+    try{ localStorage.setItem(DRAFT_KEY, JSON.stringify(stripPhotos(draft))); }catch(e2){}
+  }
+}
+
+function scheduleDraftSave(){
+  clearTimeout(draftTimer);
+  draftTimer = setTimeout(saveDraft, 400);
+}
+
+function clearDraft(){
+  try{ localStorage.removeItem(DRAFT_KEY); }catch(e){}
+}
+
+function restoreDraft(){
+  let draft = null;
+  try{ draft = JSON.parse(localStorage.getItem(DRAFT_KEY)); }catch(e){ return false; }
+  if(!draft || !draft.items) return false;
+  if(draft.mode && draft.mode !== mode) setMode(draft.mode, true);
+  HEADER_FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if(el && typeof draft.header[id] === "string") el.value = draft.header[id];
+  });
+  document.getElementById("fDriverOther").hidden = document.getElementById("fDriver").value !== OTHER;
+  document.getElementById("fVehicleOther").hidden = document.getElementById("fVehicle").value !== OTHER;
+  Object.keys(state).forEach(k => {
+    const d = draft.items[k];
+    if(!d) return;
+    state[k].note = d.note || "";
+    state[k].photos = d.photos || [];
+    state[k].status = d.status || null;
+    const noteEl = document.getElementById("note-" + k);
+    if(!noteEl) return;                       // hidden in this mode, state is kept anyway
+    noteEl.value = state[k].note;
+    if(state[k].photos.length) renderPhotos(k);
+    if(d.status) setStatus(k, d.status);
+    else if(state[k].note || state[k].photos.length){
+      document.getElementById("extra-" + k).classList.add("show");
+    }
+  });
+  Object.keys(vehiclePhotos).forEach(k => {
+    vehiclePhotos[k] = (draft.vehiclePhotos && draft.vehiclePhotos[k]) || [];
+    if(vehiclePhotos[k].length) renderVehiclePhotos(k);
+  });
+  if(draft.ack && draft.ack.accepted){
+    const ackEl = document.getElementById("fAck");
+    if(ackEl){
+      ackEl.checked = true;
+      ackAt = draft.ack.at || "";
+      const d = ackAt ? new Date(ackAt) : null;
+      document.getElementById("ackStamp").textContent =
+        "Accepted / Aceptado: " + (d && !isNaN(d) ? d.toLocaleString() : "-");
+    }
+  }
+  refreshEvidenceFlags();
+  return true;
+}
+
+function newInspection(){
+  if(!confirm("Start a new inspection? Unsaved data will be lost.\n¿Iniciar una nueva inspección? Se perderán los datos no guardados.")) return;
+  clearDraft();
+  initState();
+  render();
+  ackAt = "";
+  HEADER_FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = "";
+  });
+  document.getElementById("fDriverOther").hidden = true;
+  document.getElementById("fVehicleOther").hidden = true;
+  document.getElementById("odoWarn").classList.remove("show");
+  try{
+    const me = localStorage.getItem(ME_KEY);
+    if(me && DRIVERS.indexOf(me) !== -1) document.getElementById("fDriver").value = me;
+  }catch(e){}
+  setToday();
+  refreshEvidenceFlags();
+  updateSummary();
+  updateDueBanner();
+  showToast("New inspection ✓");
+}
+
+function setToday(){
+  const el = document.getElementById("fDate");
+  const d = new Date();
+  const iso = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+  try{ el.value = iso; }catch(e){}
+  if(!el.value){ try{ el.valueAsDate = d; }catch(e){} }
+}
+
+/* ---------- boot ---------- */
+setupPickers();
+initState();
+try{
+  const savedMode = localStorage.getItem(MODE_KEY);
+  if(savedMode === "weekly" || savedMode === "daily") mode = savedMode;
+}catch(e){}
+document.getElementById("modeDaily").classList.toggle("active", mode === "daily");
+document.getElementById("modeWeekly").classList.toggle("active", mode === "weekly");
+render();
+setToday();
+purgeOldHistory();
+const restored = restoreDraft();
+refreshEvidenceFlags();
+updateSummary();
+updateDueBanner();
+if(restored) showToast("Draft restored / Borrador recuperado");
+
+document.addEventListener("input", scheduleDraftSave, true);
+document.addEventListener("change", scheduleDraftSave, true);
+document.addEventListener("visibilitychange", function(){
+  if(document.visibilityState === "hidden") saveDraft();
+});
+window.addEventListener("pagehide", saveDraft);
+</script>
+
+
+</body></html>
